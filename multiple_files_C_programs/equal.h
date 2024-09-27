@@ -1,0 +1,2 @@
+void equal(void);
+

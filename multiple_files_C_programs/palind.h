@@ -1,0 +1,2 @@
+void palind(void);
+
