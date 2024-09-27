@@ -1,0 +1,83 @@
+1. Create the Dynamic Library Source Code
+Let’s assume you have a source file sum.c containing the functions you want to use in your main program.
+
+Example (sum.c):
+
+// sum.c
+#include <stdio.h>
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int sub(int a, int b) {
+    return a - b;
+}
+
+int mult(int a, int b) {
+    return a * b;
+}
+2. Compile sum.c into a Dynamic Library
+To create the dynamic library (libsum.so), use the following command:
+
+
+  gcc -fPIC -c sum.c -o sum.o   # Compile position-independent code (PIC)
+  
+  gcc -shared -o libsum.so sum.o  # Create the shared library (.so file)
+  
+  -fPIC: Generates position-independent code, necessary for shared libraries.
+  
+  -shared: Creates the shared library (.so file).
+  
+  Now, you should have the file libsum.so in your directory.
+
+3. Create the Main Program Source Code
+Create a source file that uses the functions in the dynamic library.
+
+Example (summain.c):
+
+
+// summain.c
+#include <stdio.h>
+
+// Declare functions (since they are defined in the library)
+int add(int, int);
+int sub(int, int);
+int mult(int, int);
+
+int main() {
+    int a = 10, b = 20;
+
+  printf("Add: %d\n", add(a, b));
+  printf("Sub: %d\n", sub(a, b));
+  printf("Mult: %d\n", mult(a, b));
+
+  return 0;
+}
+
+4. Compile the Main Program and Link the Dynamic Library
+To compile summain.c and link it with the dynamic library, use:
+
+
+gcc summain.c -o sumprog -L. -lsum
+
+-L.: Tells the compiler to look for libraries in the current directory.
+
+-lsum: Links the libsum.so library (without the lib prefix and .so extension).
+
+5. Run the Program
+Before running the program, you need to tell the system where to find the dynamic library. You can do this by setting the LD_LIBRARY_PATH environment variable:
+
+
+export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH-path/of/library
+
+Now, run your program:
+
+./sumprog
+
+Summary of Commands:
+gcc -fPIC -c sum.c -o sum.o            # Step 2: Compile sum.c into object file
+gcc -shared -o libsum.so sum.o         # Step 2: Create the dynamic library
+gcc summain.c -o sumprog -L. -lsum     # Step 4: Compile and link main program with dynamic library
+export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH  # Step 5: Set library path
+./sumprog                             # Step 5: Run the program
