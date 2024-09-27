@@ -1,0 +1,87 @@
+1. Create the Source Code for the Library
+You need to have the C source code that contains the functions you want to include in the library. Let's assume the file is named sum.c.
+
+Example (sum.c):
+
+
+// sum.c
+#include <stdio.h>
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int sub(int a, int b) {
+    return a - b;
+}
+
+int mult(int a, int b) {
+    return a * b;
+}
+
+2. Compile the Object File for the Library
+Next, compile the sum.c file to create the object file (sum.o):
+
+gcc -c sum.c 
+
+-c: Tells the compiler to compile the source code into an object file, not an executable.
+
+3. Create the Static Library
+Now, use the ar command to bundle the object file into a static library named libsum.a:
+
+
+ar -rs libsum.a sum.o
+
+ ar: The tool used to create or modify archives (static libraries).
+ 
+-r: Replace or add the object file (sum.o) in the library (libsum.a).
+
+-s: Create an index for faster access to functions in the library.
+
+libsum.a: The name of the static library being created or updated.
+
+sum.o: The object file that contains the compiled functions to be included in the library.
+
+4. Create the Main Program
+Create the main program source file that will use the functions from the static library. Let’s name this file summain.c.
+
+Example (summain.c):
+
+
+// summain.c
+#include <stdio.h>
+
+// Declare the functions from the library
+int add(int, int);
+int sub(int, int);
+int mult(int, int);
+
+int main() {
+    int a = 10, b = 20;
+
+   printf("Add: %d\n", add(a, b));
+   printf("Sub: %d\n", sub(a, b));
+   printf("Mult: %d\n", mult(a, b));
+
+  return 0;
+}
+5. Compile the Main Program and Link with the Static Library
+Now, compile the summain.c file and link it with the static library (libsum.a). Use the following command:
+
+
+gcc summain.c -o sumprog -L. -lsum
+-L.: Tells the compiler to look for the library in the current directory.
+-lsum: Links against the static library (libsum.a). The prefix lib and the extension .a are omitted.
+6. Run the Program
+Now, run the program:
+
+
+./sumprog
+This will execute the program and print the results of the add, sub, and mult functions from the static library.
+
+Summary of Commands:
+
+gcc -c sum.c               # Step 2: Compile sum.c to sum.o
+ar -rs libsum.a sum.o           # Step 3: Create the static library libsum.a
+gcc summain.c -o sumprog -L. -lsum  # Step 5: Compile main program and link with static library
+./sumprog                       # Step 6: Run the program
