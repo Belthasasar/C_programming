@@ -1,0 +1,7 @@
+Compile the program
+
+      gcc cube.c cubemain.c -o cube
+
+Run the program
+
+      ./cube
